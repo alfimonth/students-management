@@ -1,4 +1,5 @@
 <script setup>
+import InputError from '@/Components/InputError.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { watch, ref } from 'vue';
@@ -36,22 +37,31 @@ const getSections = (classId) => {
         sections.value = response.data;
     });
 };
+
+const newStudent = () => {
+    form.post(route('students.store'));
+};
 </script>
 <template>
     <Head title="Create Student" />
 
     <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                New Student
+            </h2>
+        </template>
         <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
                 <div class="space-y-6 sm:px-6 lg:col-span-12 lg:px-0">
-                    <form>
+                    <form @submit.prevent="newStudent">
                         <div class="shadow sm:overflow-hidden sm:rounded-md">
                             <div class="space-y-6 bg-white px-4 py-6 sm:p-6">
                                 <div>
                                     <h3
                                         class="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create Student
+                                        Student Information
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-500">
                                         Use this form to create a new student.
@@ -69,7 +79,14 @@ const getSections = (classId) => {
                                             v-model="form.name"
                                             type="text"
                                             id="name"
-                                            class="@error('name') @enderror mt-1 block w-full rounded-md border border-gray-300 border-red-300 px-3 py-2 text-red-900 shadow-sm focus:border-indigo-500 focus:border-red-500 focus:outline-none focus:ring-indigo-500 focus:ring-red-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            :class="{
+                                                'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500':
+                                                    form.errors.name,
+                                            }"
+                                        />
+                                        <InputError
+                                            :message="form.errors.name"
                                         />
                                         <!-- <p class="mt-1 text-sm text-red-500">
                                             Error Message
@@ -87,7 +104,14 @@ const getSections = (classId) => {
                                             type="email"
                                             id="email"
                                             autocomplete="email"
-                                            class="@error('email') @enderror mt-1 block w-full rounded-md border border-gray-300 border-red-300 px-3 py-2 text-red-900 shadow-sm focus:border-indigo-500 focus:border-red-500 focus:outline-none focus:ring-indigo-500 focus:ring-red-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            :class="{
+                                                'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500':
+                                                    form.errors.email,
+                                            }"
+                                        />
+                                        <InputError
+                                            :message="form.errors.email"
                                         />
                                     </div>
 
@@ -100,7 +124,11 @@ const getSections = (classId) => {
                                         <select
                                             v-model="form.class_id"
                                             id="class_id"
-                                            class="@error('class_id') @enderror mt-1 block w-full rounded-md border border-gray-300 border-red-300 bg-white px-3 py-2 text-red-900 shadow-sm focus:border-indigo-500 focus:border-red-500 focus:outline-none focus:ring-indigo-500 focus:ring-red-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            :class="{
+                                                'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500':
+                                                    form.errors.class_id,
+                                            }"
                                         >
                                             <option value="">
                                                 Select a Class
@@ -113,6 +141,9 @@ const getSections = (classId) => {
                                                 {{ item.name }}
                                             </option>
                                         </select>
+                                        <InputError
+                                            :message="form.errors.class_id"
+                                        />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
@@ -124,7 +155,11 @@ const getSections = (classId) => {
                                         <select
                                             v-model="form.section_id"
                                             id="section_id"
-                                            class="@error('section_id') @enderror mt-1 block w-full rounded-md border border-gray-300 border-red-300 bg-white px-3 py-2 text-red-900 shadow-sm focus:border-indigo-500 focus:border-red-500 focus:outline-none focus:ring-indigo-500 focus:ring-red-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            :class="{
+                                                'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500':
+                                                    form.errors.section_id,
+                                            }"
                                         >
                                             <option value="">
                                                 Select a Section
@@ -137,6 +172,9 @@ const getSections = (classId) => {
                                                 {{ section.name }}
                                             </option>
                                         </select>
+                                        <InputError
+                                            :message="form.errors.section_id"
+                                        />
                                     </div>
                                 </div>
                             </div>
