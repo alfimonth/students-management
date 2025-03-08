@@ -1,5 +1,7 @@
 <script setup>
 import MagnifyingGlass from '@/Components/Icons/MagnifyingGlass.vue';
+import Paginantion from '@/Components/Paginantion.vue';
+import { Head } from '@inertiajs/vue3';
 
 defineProps({
     students: {
@@ -10,6 +12,7 @@ defineProps({
 </script>
 
 <template>
+    <Head title="Students" />
     <div class="bg-gray-100 py-10">
         <div class="mx-auto max-w-7xl">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -162,7 +165,7 @@ defineProps({
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="mt-5">Links</div>
+                            <Paginantion :data="students" />
                         </div>
                     </div>
                 </div>
