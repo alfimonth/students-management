@@ -10,9 +10,14 @@ defineProps({
         type: Object,
         required: true,
     },
+    classes: {
+        type: Object,
+        required: true,
+    },
 });
 
 let search = ref(usePage().props.search),
+    class_id = ref(usePage().props.class_id),
     pageNumber = ref(1);
 
 let studentsUrl = computed(() => {
@@ -21,6 +26,10 @@ let studentsUrl = computed(() => {
 
     if (search.value) {
         url.searchParams.append('search', search.value);
+    }
+
+    if (class_id.value) {
+        url.searchParams.append('class_id', class_id.value);
     }
 
     return url;
@@ -85,7 +94,7 @@ const deleteStudent = (studentId) => {
                         </div>
                     </div>
 
-                    <div class="mt-6 flex flex-col justify-between sm:flex-row">
+                    <div class="mt-6 flex flex-col justify-start sm:flex-row">
                         <div class="relative col-span-3 text-sm text-gray-800">
                             <div
                                 class="pointer-events-none absolute bottom-0 left-0 top-0 flex items-center pl-2 text-gray-500"
@@ -101,6 +110,19 @@ const deleteStudent = (studentId) => {
                                 class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
+                        <select
+                            v-model="class_id"
+                            class="ml-5 block rounded-lg border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        >
+                            <option value="">Filter By Class</option>
+                            <option
+                                v-for="item in classes.data"
+                                :key="item.id"
+                                :value="item.id"
+                            >
+                                {{ item.name }}
+                            </option>
+                        </select>
                     </div>
 
                     <div class="mt-8 flex flex-col">
@@ -185,12 +207,12 @@ const deleteStudent = (studentId) => {
                                                 <td
                                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                                 >
-                                                    Class 1
+                                                    {{ student.class.name }}
                                                 </td>
                                                 <td
                                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                                 >
-                                                    Section A
+                                                    {{ student.section.name }}
                                                 </td>
                                                 <td
                                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"

@@ -14,9 +14,11 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $studentsQuery = Student::query();
+        $classes = ClassesResource::collection(Classes::all());
 
-        $this->applySearch($studentsQuery, $request->search);
+        $studentsQuery = Student::search($request);
+
+        // $this->applySearch($studentsQuery, $request->search);
 
         $students = StudentResource::collection(
             $studentsQuery->paginate(10)
@@ -24,15 +26,10 @@ class StudentController extends Controller
 
         return inertia('Students/Index', [
             'students' => $students,
-            'search' => $request->search ??'',
+            'classes' => $classes,
+            'class_id' => $request->class_id ?? '',
+            'search' => $request->search ?? '',
         ]);
-    }
-
-    public function applySearch($query, $search)
-    {
-        return $query->when($search, function ($query, $search) {
-            return $query->where('name', 'LIKE', "%$search%");
-        });
     }
 
     public function create()
@@ -51,7 +48,8 @@ class StudentController extends Controller
         return redirect()->route('students.index');
     }
 
-    public function edit(Student $student){
+    public function edit(Student $student)
+    {
         $classes = ClassesResource::collection(Classes::all());
 
         return inertia('Students/Edit', [
