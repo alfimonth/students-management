@@ -26,6 +26,10 @@ let studentsUrl = computed(() => {
     return url;
 });
 
+const updatedPageNumber = (link) => {
+    pageNumber.value = link.url.split('=')[1];
+};
+
 watch(
     () => studentsUrl.value,
     (upadatedStudentsUrl) => {
@@ -34,6 +38,15 @@ watch(
             preserveState: true,
             replace: true,
         });
+    },
+);
+
+watch(
+    () => search.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
     },
 );
 
@@ -214,7 +227,10 @@ const deleteStudent = (studentId) => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <Paginantion :data="students" />
+                                <Paginantion
+                                    :data="students"
+                                    :updatedPageNumber="updatedPageNumber"
+                                />
                             </div>
                         </div>
                     </div>
